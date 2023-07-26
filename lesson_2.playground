@@ -1,0 +1,76 @@
+//Домашнее задание
+//1. Описать несколько структур – любой легковой автомобиль SportCar и любой грузовик TrunkCar.
+//2. Структуры должны содержать марку авто, год выпуска, объем багажника/кузова, запущен ли двигатель, открыты ли окна, заполненный объем багажника.
+//3. Описать перечисление с возможными действиями с автомобилем: запустить/заглушить двигатель, открыть/закрыть окна, погрузить/выгрузить из кузова/багажника груз определенного объема.
+//4. Добавить в структуры метод с одним аргументом типа перечисления, который будет менять свойства структуры в зависимости от действия.
+//5. Инициализировать несколько экземпляров структур. Применить к ним различные действия.
+//6. Вывести значения свойств экземпляров в консоль.
+
+
+import Foundation
+
+enum CarActions {
+    case engineStart
+    case engineStop
+    case windowsOpen
+    case windowsClose
+    case trunkLoad
+    case trunkUnload
+}
+
+struct TypicalCar {
+    var brand: String
+    var realiseDate: Int
+    var trunkCapacity: Int
+    var isEngineStart: Bool = false
+    var isWindowsClose: Bool = false
+    var trunkVolume: Int
+    var trunkVolumeFill: Int = 0
+    
+    mutating func doAction(action: CarActions) {
+        switch action {
+        case .engineStart:
+            isEngineStart = true
+            print("Двигатель \(brand) запущен")
+        case .engineStop:
+            isEngineStart = false
+            print("Двигатель \(brand) заглушен")
+        case .windowsOpen:
+            isWindowsClose = true
+            print("Окна \(brand) открыты")
+        case .windowsClose:
+            isWindowsClose = false
+            print("Окна \(brand) закрыты")
+        case .trunkLoad:
+            if trunkVolume <= 0 {
+                print("Вы ничего не положили")
+            }  else if trunkVolume > trunkCapacity - trunkVolumeFill {
+                print("Груз объемом \(trunkVolume) не поместится в багажник \(brand)")
+            } else if trunkVolume > trunkCapacity {
+                print("В багажнике \(brand) свободно \(trunkCapacity - trunkVolumeFill) литров")
+            } else {
+                trunkVolumeFill += trunkVolume
+                print("Груз объемом \(trunkVolume) поместился в \(brand)")
+            }
+        case .trunkUnload:
+            if trunkVolumeFill == 0 {
+                print("Багажник в \(brand) пуст")
+            } else {
+                trunkVolumeFill -= trunkVolume
+                print("Выгружен груз объемом \(trunkVolume) литров, в багажнике еще \(trunkVolumeFill) литров")
+            }
+        }
+        
+    }
+}
+
+var car1 = TypicalCar(brand: "Audi", realiseDate: 2021, trunkCapacity: 70, trunkVolume: 30)
+car1.doAction(action: .engineStart)
+car1.doAction(action: .trunkUnload)
+car1.doAction(action: .windowsOpen)
+car1.doAction(action: .trunkLoad)
+car1.doAction(action: .trunkUnload)
+car1.doAction(action: .trunkLoad)
+car1.doAction(action: .trunkLoad)
+car1.doAction(action: .trunkLoad)
+car1.doAction(action: .trunkLoad)
