@@ -24,6 +24,10 @@ struct Stack<T> {
         guard index < elements.count, index >= 0 else { return nil }
         return elements[index]
     }
+    
+    mutating func filter(_ isIncluded: (T) -> Bool) {
+            elements = elements.filter(isIncluded)
+        }
 }
 
 var stack = Stack<Int>()
@@ -35,3 +39,6 @@ stack.push(39)
 print(stack)
 stack.pop()
 print(stack[6] as Any)
+
+stack.filter { $0 % 2 == 0 }
+print(stack)
